@@ -12,7 +12,7 @@
         <dependency>
             <groupId>io.javalin</groupId>
             <artifactId>javalin</artifactId>
-            <version>0.5.1</version>
+            <version>0.5.2</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-server</artifactId>
-            <version>9.4.6.v20170531</version>
+            <version>9.4.7.v20170914</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
