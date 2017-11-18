@@ -1,19 +1,21 @@
+import io.javalin.Javalin;
+import io.javalin.embeddedserver.jetty.websocket.WsSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
-
-import io.javalin.Javalin;
 import util.HerokuUtil;
-
-import static j2html.TagCreator.*;
+import static j2html.TagCreator.article;
+import static j2html.TagCreator.attrs;
+import static j2html.TagCreator.b;
+import static j2html.TagCreator.p;
+import static j2html.TagCreator.span;
 
 public class Chat {
 
-    private static Map<Session, String> userUsernameMap = new ConcurrentHashMap<>();
+    private static Map<WsSession, String> userUsernameMap = new ConcurrentHashMap<>();
     private static int nextUserNumber = 1; // Assign to username for next connecting user
 
     public static void main(String[] args) {
@@ -42,7 +44,7 @@ public class Chat {
     private static void broadcastMessage(String sender, String message) {
         userUsernameMap.keySet().stream().filter(Session::isOpen).forEach(session -> {
             try {
-                session.getRemote().sendString(
+                session.send(
                     new JSONObject()
                         .put("userMessage", createHtmlMessageFromSender(sender, message))
                         .put("userlist", userUsernameMap.values()).toString()

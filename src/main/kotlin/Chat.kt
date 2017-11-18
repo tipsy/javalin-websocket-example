@@ -1,12 +1,12 @@
 import io.javalin.Javalin
+import io.javalin.embeddedserver.jetty.websocket.WsSession
 import j2html.TagCreator.*
-import org.eclipse.jetty.websocket.api.Session
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-private val userUsernameMap = ConcurrentHashMap<Session, String>()
+private val userUsernameMap = ConcurrentHashMap<WsSession, String>()
 private var nextUserNumber = 1 // Assign to username for next connecting user
 
 fun main(args: Array<String>) {
@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
 // Sends a message from one user to all users, along with a list of current usernames
 fun broadcastMessage(sender: String, message: String) {
     userUsernameMap.keys.filter { it.isOpen }.forEach { session ->
-        session.remote.sendString(
+        session.send(
                 JSONObject()
                         .put("userMessage", createHtmlMessageFromSender(sender, message))
                         .put("userlist", userUsernameMap.values).toString()
