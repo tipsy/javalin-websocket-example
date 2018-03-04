@@ -1,4 +1,4 @@
-package util;
+package app.util;
 
 public class HerokuUtil {
     public static int getHerokuAssignedPort() {

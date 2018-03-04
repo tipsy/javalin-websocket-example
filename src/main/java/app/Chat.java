@@ -1,3 +1,5 @@
+package app;
+
 import io.javalin.Javalin;
 import io.javalin.embeddedserver.jetty.websocket.WsSession;
 import java.text.SimpleDateFormat;
@@ -6,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
-import util.HerokuUtil;
+import app.util.HerokuUtil;
 import static j2html.TagCreator.article;
 import static j2html.TagCreator.attrs;
 import static j2html.TagCreator.b;

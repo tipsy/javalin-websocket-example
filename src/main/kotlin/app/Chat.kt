@@ -1,3 +1,5 @@
+package app
+
 import io.javalin.Javalin
 import io.javalin.embeddedserver.jetty.websocket.WsSession
 import j2html.TagCreator.*
