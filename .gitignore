@@ -8,5 +8,8 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
+.gradle/
+build/
+
 .idea
 *.iml
