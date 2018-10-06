@@ -45,15 +45,11 @@ public class Chat {
     // Sends a message from one user to all users, along with a list of current usernames
     private static void broadcastMessage(String sender, String message) {
         userUsernameMap.keySet().stream().filter(Session::isOpen).forEach(session -> {
-            try {
-                session.send(
-                    new JSONObject()
-                        .put("userMessage", createHtmlMessageFromSender(sender, message))
-                        .put("userlist", userUsernameMap.values()).toString()
-                );
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            session.send(
+                new JSONObject()
+                    .put("userMessage", createHtmlMessageFromSender(sender, message))
+                    .put("userlist", userUsernameMap.values()).toString()
+            );
         });
     }
 
