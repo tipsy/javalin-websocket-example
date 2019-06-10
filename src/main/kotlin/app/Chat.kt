@@ -1,41 +1,41 @@
 package app
 
 import io.javalin.Javalin
-import io.javalin.websocket.WsSession
+import io.javalin.websocket.WsContext
 import j2html.TagCreator.*
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-private val userUsernameMap = ConcurrentHashMap<WsSession, String>()
+private val userUsernameMap = ConcurrentHashMap<WsContext, String>()
 private var nextUserNumber = 1 // Assign to username for next connecting user
 
 fun main(args: Array<String>) {
-    Javalin.create().apply {
-        port(7070)
-        enableStaticFiles("/public")
+    Javalin.create {
+        it.addStaticFiles("/public")
+    }.apply {
         ws("/chat") { ws ->
-            ws.onConnect { session ->
+            ws.onConnect { ctx ->
                 val username = "User" + nextUserNumber++
-                userUsernameMap.put(session, username)
+                userUsernameMap.put(ctx, username)
                 broadcastMessage("Server", "$username joined the chat")
             }
-            ws.onClose { session, status, message ->
-                val username = userUsernameMap[session]
-                userUsernameMap.remove(session)
+            ws.onClose { ctx ->
+                val username = userUsernameMap[ctx]
+                userUsernameMap.remove(ctx)
                 broadcastMessage("Server", "$username left the chat")
             }
-            ws.onMessage { session, message ->
-                broadcastMessage(userUsernameMap[session]!!, message)
+            ws.onMessage { ctx ->
+                broadcastMessage(userUsernameMap[ctx]!!, ctx.message())
             }
         }
-    }.start()
+    }.start(7070)
 }
 
 // Sends a message from one user to all users, along with a list of current usernames
 fun broadcastMessage(sender: String, message: String) {
-    userUsernameMap.keys.filter { it.isOpen }.forEach { session ->
+    userUsernameMap.keys.filter { it.session.isOpen }.forEach { session ->
         session.send(
                 JSONObject()
                         .put("userMessage", createHtmlMessageFromSender(sender, message))
