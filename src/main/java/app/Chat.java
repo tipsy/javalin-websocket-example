@@ -2,6 +2,7 @@ package app;
 
 import app.util.HerokuUtil;
 import io.javalin.Javalin;
+import io.javalin.http.staticfiles.Location;
 import io.javalin.websocket.WsContext;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +22,7 @@ public class Chat {
 
     public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
-            config.addStaticFiles("/public");
+            config.addStaticFiles("/public", Location.CLASSPATH);
         }).start(HerokuUtil.getHerokuAssignedPort());
 
         app.ws("/chat", ws -> {

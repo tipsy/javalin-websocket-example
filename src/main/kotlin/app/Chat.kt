@@ -1,6 +1,7 @@
 package app
 
 import io.javalin.Javalin
+import io.javalin.http.staticfiles.Location
 import io.javalin.websocket.WsContext
 import j2html.TagCreator.*
 import org.json.JSONObject
@@ -13,7 +14,7 @@ private var nextUserNumber = 1 // Assign to username for next connecting user
 
 fun main(args: Array<String>) {
     Javalin.create {
-        it.addStaticFiles("/public")
+        it.addStaticFiles("/public", Location.CLASSPATH)
     }.apply {
         ws("/chat") { ws ->
             ws.onConnect { ctx ->
